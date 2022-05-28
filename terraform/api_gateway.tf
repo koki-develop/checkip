@@ -45,7 +45,11 @@ resource "aws_api_gateway_deployment" "checkip" {
   rest_api_id = aws_api_gateway_rest_api.checkip.id
 
   triggers = {
-    redeployment = sha1(jsonencode(aws_api_gateway_rest_api.checkip.body))
+    redeployment = sha1(jsonencode([
+      aws_api_gateway_rest_api.checkip.body,
+      aws_api_gateway_integration.get_ip.request_templates,
+      aws_api_gateway_integration_response.get_ip_200.response_templates,
+    ]))
   }
 
   lifecycle {
