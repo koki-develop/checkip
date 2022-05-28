@@ -62,3 +62,15 @@ resource "aws_api_gateway_stage" "checkip" {
   deployment_id = aws_api_gateway_deployment.checkip.id
   stage_name    = "prod"
 }
+
+resource "aws_api_gateway_domain_name" "checkip" {
+  certificate_arn = aws_acm_certificate.checkip.arn
+  domain_name     = local.domain
+  security_policy = "TLS_1_2"
+}
+
+resource "aws_api_gateway_base_path_mapping" "checkip" {
+  api_id      = aws_api_gateway_rest_api.checkip.id
+  stage_name  = "prod"
+  domain_name = aws_api_gateway_domain_name.checkip.domain_name
+}
