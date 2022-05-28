@@ -35,12 +35,19 @@ resource "aws_api_gateway_integration_response" "get_ip_200" {
   status_code = aws_api_gateway_method_response.get_ip_200.status_code
 
   response_templates = {
-    "application/json" = "test"
+    "application/json" = jsonencode({
+      sourceIp = "$context.identity.sourceIp"
+    })
   }
 }
 
 resource "aws_api_gateway_deployment" "checkip" {
   rest_api_id = aws_api_gateway_rest_api.checkip.id
+
+  triggers = {
+    redeployment = sha1(jsonencode(aws_api_gateway_rest_api.checkip.body))
+  }
+
   lifecycle {
     create_before_destroy = true
   }
