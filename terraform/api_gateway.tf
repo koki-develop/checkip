@@ -43,7 +43,7 @@ resource "aws_api_gateway_integration_response" "get_ip_200" {
 
   response_templates = {
     "application/json" = jsonencode({
-      sourceIp = "$context.identity.sourceIp"
+      source_ip = "$context.identity.sourceIp"
     })
   }
 
