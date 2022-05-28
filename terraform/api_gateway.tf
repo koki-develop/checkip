@@ -38,3 +38,16 @@ resource "aws_api_gateway_integration_response" "get_ip_200" {
     "application/json" = "test"
   }
 }
+
+resource "aws_api_gateway_deployment" "checkip" {
+  rest_api_id = aws_api_gateway_rest_api.checkip.id
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_api_gateway_stage" "checkip" {
+  rest_api_id   = aws_api_gateway_rest_api.checkip.id
+  deployment_id = aws_api_gateway_deployment.checkip.id
+  stage_name    = "prod"
+}
