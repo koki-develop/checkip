@@ -17,7 +17,9 @@ resource "aws_api_gateway_integration" "get_ip" {
   passthrough_behavior = "WHEN_NO_TEMPLATES"
 
   request_templates = {
-    "application/json" : jsonencode({ statusCode : 200 })
+    "application/json" : jsonencode({
+      statusCode = 200
+    })
   }
 }
 
@@ -26,6 +28,11 @@ resource "aws_api_gateway_method_response" "get_ip_200" {
   resource_id = aws_api_gateway_rest_api.checkip.root_resource_id
   http_method = aws_api_gateway_method.get_ip.http_method
   status_code = "200"
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+  }
 }
 
 resource "aws_api_gateway_integration_response" "get_ip_200" {
@@ -38,6 +45,11 @@ resource "aws_api_gateway_integration_response" "get_ip_200" {
     "application/json" = jsonencode({
       sourceIp = "$context.identity.sourceIp"
     })
+  }
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET'"
   }
 }
 
