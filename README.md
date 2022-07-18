@@ -1,4 +1,5 @@
-[![LICENSE](https://img.shields.io/github/license/koki-develop/checkip?style=plastic)](./LICENSE)
+[![GitHub Actions](https://github.com/koki-develop/checkip/actions/workflows/main.yml/badge.svg)](https://github.com/koki-develop/checkip/actions/workflows/main.yml)
+[![LICENSE](https://img.shields.io/github/license/koki-develop/checkip)](./LICENSE)
 [![Twitter Follow](https://img.shields.io/twitter/follow/koki_develop?style=social)](https://twitter.com/koki_develop)
 
 # CheckIP
