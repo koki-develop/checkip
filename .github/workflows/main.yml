@@ -7,6 +7,9 @@ on:
 
 jobs:
   terraform_plan:
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -24,6 +27,9 @@ jobs:
       - run: terraform plan
 
   terraform_apply:
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
     defaults:
       run:
