@@ -1,6 +1,10 @@
 resource "aws_acm_certificate" "checkip" {
   domain_name       = local.domain
   validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_acm_certificate_validation" "checkip" {
