@@ -1,0 +1,42 @@
+name: build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  terraform_plan:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform/app
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-east-1
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE_ARN }}
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.2.3
+      - run: terraform init
+      - run: terraform plan
+
+  terraform_apply:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform/app
+    needs: [terraform_plan]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-east-1
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE_ARN }}
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.2.3
+      - run: terraform init
+      - run: terraform apply -auto-approve
