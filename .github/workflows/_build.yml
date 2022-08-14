@@ -1,15 +1,10 @@
 name: build
 
 on:
-  push:
-    branches:
-      - main
+  workflow_call:
 
 jobs:
   terraform_plan:
-    uses: ./.github/workflows/_build.yml
-
-  terraform_apply:
     permissions:
       id-token: write
       contents: read
@@ -17,7 +12,6 @@ jobs:
     defaults:
       run:
         working-directory: terraform/app
-    needs: [terraform_plan]
     steps:
       - uses: actions/checkout@v3
       - uses: aws-actions/configure-aws-credentials@v1
@@ -28,4 +22,4 @@ jobs:
         with:
           terraform_version: 1.2.3
       - run: terraform init
-      - run: terraform apply -auto-approve
+      - run: terraform plan
