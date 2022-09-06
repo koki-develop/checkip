@@ -12,7 +12,7 @@ runs:
     - name: install tfcmt
       shell: bash
       run: |
-        wget "https://github.com/suzuki-shunsuke/tfcmt/releases/download/${{ inputs.version }}/tfcmt_$(uname)_$(arch).tar.gz" -O /tmp/tfcmt.tar.gz
+        wget "https://github.com/suzuki-shunsuke/tfcmt/releases/download/${{ inputs.version }}/tfcmt_linux_amd64.tar.gz" -O /tmp/tfcmt.tar.gz
         tar xzf /tmp/tfcmt.tar.gz
         sudo mv /tmp/tfcmt /usr/bin
         tfcmt --version
