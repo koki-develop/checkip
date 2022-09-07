@@ -2,6 +2,16 @@ name: build
 
 on:
   workflow_call:
+    inputs:
+      use-tfcmt:
+        description: ""
+        type: boolean
+        required: false
+        default: false
+      pr-number:
+        description: ""
+        type: number
+        required: false
     secrets:
       AWS_IAM_ROLE_ARN:
         required: true
@@ -28,4 +38,10 @@ jobs:
         with:
           version: v3.4.0
       - run: terraform init
-      - run: terraform plan
+
+      - name: terraform plan
+        run: tfcmt -owner koki-develop -repo checkip -pr ${{ inputs.pr-number }} plan patch -- terraform plan -input=false -no-color
+        if: ${{ inputs.use-tfcmt }}
+      - name: terraform plan
+        run: terraform plan
+        if: ${{ !inputs.use-tfcmt }}
