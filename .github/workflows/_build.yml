@@ -43,7 +43,7 @@ jobs:
       - name: terraform plan
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: tfcmt -owner koki-develop -repo checkip -pr ${{ inputs.pr-number }} plan -patch -- terraform plan -input=false -no-color
+        run: tfcmt plan -patch -- terraform plan -input=false -no-color
         if: ${{ inputs.use-tfcmt }}
       - name: terraform plan
         run: terraform plan
