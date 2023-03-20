@@ -17,7 +17,7 @@ resource "aws_api_gateway_integration" "get_ip" {
   passthrough_behavior = "WHEN_NO_TEMPLATES"
 
   request_templates = {
-    "application/json" : jsonencode({
+    "application/json" = jsonencode({
       statusCode = 200
     })
   }
