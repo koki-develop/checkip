@@ -23,20 +23,7 @@ data "aws_iam_policy_document" "action_assume_role_policy" {
   }
 }
 
-resource "aws_iam_policy" "action" {
-  name   = "${local.prefix}-action-policy"
-  policy = data.aws_iam_policy_document.action_policy.json
-}
-
-data "aws_iam_policy_document" "action_policy" {
-  statement {
-    effect    = "Allow"
-    actions   = ["*"]
-    resources = ["*"]
-  }
-}
-
 resource "aws_iam_role_policy_attachment" "action" {
   role       = aws_iam_role.action.name
-  policy_arn = aws_iam_policy.action.arn
+  policy_arn = "arn:aws:iam::aws:policy/PowerUserAccess"
 }
