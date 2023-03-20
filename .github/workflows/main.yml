@@ -1,26 +1,25 @@
 name: build
 
 on:
+  pull_request:
   push:
     branches:
       - main
 
 jobs:
   terraform_plan:
-    uses: ./.github/workflows/_build.yml
-    secrets: inherit
-
-  terraform_apply:
     permissions:
       id-token: write
       contents: read
+      pull-requests: write
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: terraform/app
-    needs: [terraform_plan]
     steps:
       - uses: actions/checkout@v3
+
+      # setup
       - uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: us-east-1
@@ -29,4 +28,17 @@ jobs:
         with:
           terraform_version: 1.4.2
       - run: terraform init
+
+      # plan
+      - uses: ./.github/actions/setup-tfcmt
+        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          version: v3.4.0
+      - run: tfcmt plan -patch -- terraform plan -input=false -no-color
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # apply
       - run: terraform apply -auto-approve
+        if: ${{ github.ref_name == 'main' }}
